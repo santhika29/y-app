@@ -5,13 +5,16 @@ namespace frontend\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\monitoringkacamata;
+use frontend\models\MonitoringKacamata;
 
 /**
- * MonitoringKacamataSearch represents the model behind the search form about `frontend\models\monitoringkacamata`.
+ * MonitoringKacamataSearch represents the model behind the search form about `frontend\models\MonitoringKacamata`.
  */
-class MonitoringKacamataSearch extends monitoringkacamata
+class MonitoringKacamataSearch extends MonitoringKacamata
 {
+    //variabel tambahan
+    public $nikkes0;
+
     /**
      * @inheritdoc
      */
@@ -20,6 +23,8 @@ class MonitoringKacamataSearch extends monitoringkacamata
         return [
             [['id', 'hak_kacamata_id', 'created_by'], 'integer'],
             [['nikkes', 'tgl_ambil', 'created_at', 'updated_at'], 'safe'],
+            //rules tambahan
+            [['nikkes0'],'safe']
         ];
     }
 
@@ -41,11 +46,20 @@ class MonitoringKacamataSearch extends monitoringkacamata
      */
     public function search($params)
     {
-        $query = monitoringkacamata::find();
+        $query = MonitoringKacamata::find();
+
+        // add conditions that should always apply here
+        $query->joinWith(['nikkes0']);
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['nikkes0'] = [
+            'asc' => ['peserta.nama' => SORT_ASC],
+            'desc' => ['peserta.nama' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -55,6 +69,7 @@ class MonitoringKacamataSearch extends monitoringkacamata
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'hak_kacamata_id' => $this->hak_kacamata_id,
@@ -64,7 +79,8 @@ class MonitoringKacamataSearch extends monitoringkacamata
             'created_by' => $this->created_by,
         ]);
 
-        $query->andFilterWhere(['like', 'nikkes', $this->nikkes]);
+        $query->andFilterWhere(['like', 'monitoring_kacamata.nikkes', $this->nikkes])
+              ->andFilterWhere(['like','peserta.nama',$this->nikkes0]);
 
         return $dataProvider;
     }

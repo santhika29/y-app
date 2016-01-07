@@ -3,31 +3,34 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\monitoringkacamata;
+use frontend\models\MonitoringKacamata;
 use frontend\models\search\MonitoringKacamataSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MonitoringkacamataController implements the CRUD actions for monitoringkacamata model.
+ * MonitoringkacamataController implements the CRUD actions for MonitoringKacamata model.
  */
 class MonitoringkacamataController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['POST'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all monitoringkacamata models.
+     * Lists all MonitoringKacamata models.
      * @return mixed
      */
     public function actionIndex()
@@ -42,7 +45,7 @@ class MonitoringkacamataController extends Controller
     }
 
     /**
-     * Displays a single monitoringkacamata model.
+     * Displays a single MonitoringKacamata model.
      * @param string $id
      * @return mixed
      */
@@ -54,16 +57,17 @@ class MonitoringkacamataController extends Controller
     }
 
     /**
-     * Creates a new monitoringkacamata model.
+     * Creates a new MonitoringKacamata model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new monitoringkacamata();
+        $model = new MonitoringKacamata();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['/monitoringkacamata']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -72,7 +76,7 @@ class MonitoringkacamataController extends Controller
     }
 
     /**
-     * Updates an existing monitoringkacamata model.
+     * Updates an existing MonitoringKacamata model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -91,7 +95,7 @@ class MonitoringkacamataController extends Controller
     }
 
     /**
-     * Deletes an existing monitoringkacamata model.
+     * Deletes an existing MonitoringKacamata model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -104,15 +108,15 @@ class MonitoringkacamataController extends Controller
     }
 
     /**
-     * Finds the monitoringkacamata model based on its primary key value.
+     * Finds the MonitoringKacamata model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return monitoringkacamata the loaded model
+     * @return MonitoringKacamata the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = monitoringkacamata::findOne($id)) !== null) {
+        if (($model = MonitoringKacamata::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
